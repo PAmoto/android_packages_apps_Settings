@@ -128,6 +128,7 @@ public class DisplayRotation extends SettingsPreferenceFragment implements OnPre
     }
 
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        boolean value;
 
         if (preference == mAccelerometer) {
             try {
