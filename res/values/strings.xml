@@ -2827,6 +2827,14 @@
     <!-- Tethering help button - calls up a web view with general tethering info -->
     <string name="tethering_help_button_text">Help</string>
 
+    <!-- Wifi sleep timeout -->
+    <string name="wifi_idle_mn_title">Wi-Fi idle timeout</string>
+    <string name="wifi_idle_5mn">5 minutes</string>
+    <string name="wifi_idle_15mn">15 minutes (default)</string>
+    <string name="wifi_idle_30mn">30 minutes</string>
+    <string name="wifi_idle_1h">1 hour</string>
+    <string name="wifi_idle_3h">3 hours</string>
+
     <!-- Advanced tethering settings -->
     <string name="tethering_advanced_text">Advanced</string>
     <string name="tethering_lease_time_text">DHCP lease time</string>
