@@ -99,6 +99,17 @@
 	android:title="@string/paranoid_settings"       	   
         android:fragment="com.android.settings.paranoid.RomPreferences" />
 
+    <!-- Hardware rendering -->
+    <header
+        android:id="@+id/hwa_settings"
+        android:icon="@drawable/ic_settings_advanced"
+        android:title="@string/hwa_settings_title">
+        <intent
+            android:action="android.intent.action.MAIN"
+            android:targetPackage="com.cyanogenmod.settings.device.hwa"
+            android:targetClass="com.cyanogenmod.settings.device.hwa.HwaSettingsActivity" />
+    </header>
+
     <!-- DEVICE -->
     <header android:title="@string/header_category_device" />
 

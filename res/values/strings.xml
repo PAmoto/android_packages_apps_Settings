@@ -849,6 +849,9 @@
     <string name="combined_bar_auto_hide_title">Auto hide</string>
     <string name="combined_bar_auto_hide_summary">Allow combined bar to hide when showing a fullscreen app</string>
 
+    <!-- Hardware rendering -->
+    <string name="hwa_settings_title">Hardware rendering</string>
+
     <!-- Navigation Bar #CM -->
     <string name="navigation_bar_title">Navigation bar</string>
 
