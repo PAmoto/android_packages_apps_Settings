@@ -53,9 +53,11 @@ public class LockscreenInterface extends SettingsPreferenceFragment implements
     public static final String KEY_CALENDAR_PREF = "lockscreen_calendar";
     public static final String KEY_BACKGROUND_PREF = "lockscreen_background";
     private static final String KEY_LOCKSCREEN_VIBRATION = "pref_lockscreen_vibration";
+    private static final String KEY_CLOCK_ALIGN = "lockscreen_clock_align";
     private ListPreference mCustomBackground;
     private Preference mWeatherPref;
     private Preference mCalendarPref;
+    private ListPreference mClockAlign;
     private Activity mActivity;
     ContentResolver mResolver;
 
@@ -78,6 +80,8 @@ public class LockscreenInterface extends SettingsPreferenceFragment implements
         mIsScreenLarge = Utils.isScreenLarge();
         wallpaperImage = new File(mActivity.getFilesDir()+"/lockwallpaper");
         wallpaperTemporary = new File(mActivity.getCacheDir()+"/lockwallpaper.tmp");
+        mClockAlign = (ListPreference) findPreference(KEY_CLOCK_ALIGN);
+        mClockAlign.setOnPreferenceChangeListener(this);
         updateCustomBackgroundSummary();
 	mLockscreenVibration = (CheckBoxPreference) findPreference(KEY_LOCKSCREEN_VIBRATION);
         mLockscreenVibration.setChecked(Settings.System.getInt(getActivity().getContentResolver(), 
@@ -133,6 +137,14 @@ public class LockscreenInterface extends SettingsPreferenceFragment implements
             } else {
                 mCalendarPref.setSummary(R.string.lockscreen_calendar_summary);
             }
+        }
+
+        // Set the clock align value
+        if (mClockAlign != null) {
+            int clockAlign = Settings.System.getInt(mResolver,
+                    Settings.System.LOCKSCREEN_CLOCK_ALIGN, 2);
+            mClockAlign.setValue(String.valueOf(clockAlign));
+            mClockAlign.setSummary(mClockAlign.getEntries()[clockAlign]);
         }
     }
 
@@ -251,6 +263,12 @@ public class LockscreenInterface extends SettingsPreferenceFragment implements
                 updateCustomBackgroundSummary();
                 break;
             }
+            return true;
+        } else if (preference == mClockAlign) {
+            int value = Integer.valueOf((String) objValue);
+            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
+                    Settings.System.LOCKSCREEN_CLOCK_ALIGN, value);
+            mClockAlign.setSummary(mClockAlign.getEntries()[value]);
             return true;
         }
         return false;

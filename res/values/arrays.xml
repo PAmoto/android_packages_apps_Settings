@@ -1403,7 +1403,6 @@
         <item>86400</item>
     </string-array>
 
-    <!-- **** CYANOGENMOD EDITS END **** -->
     <string-array name="increasing_ring_interval_entries" translatable="false">
         <item>@string/increasing_ring_interval_eachring</item>
         <item>@string/increasing_ring_interval_half_second</item>
@@ -1423,5 +1422,18 @@
         <item>5000</item>
         <item>10000</item>
     </integer-array>
+
+    <string-array name="lockscreen_clock_align_entries" translatable="false">
+        <item>@string/lockscreen_clock_align_left</item>
+        <item>@string/lockscreen_clock_align_center</item>
+        <item>@string/lockscreen_clock_align_right</item>
+    </string-array>
+
+    <string-array name="lockscreen_clock_align_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
 <!-- **** CYANOGENMOD EDITS END **** -->
 </resources>
