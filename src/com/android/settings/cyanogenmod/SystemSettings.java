@@ -77,7 +77,7 @@ public class SystemSettings extends SettingsPreferenceFragment implements
             mOverflowButton.setChecked(Settings.System.getInt(getActivity().getContentResolver(), 
                 Settings.System.UI_MENU_BUTTON_BEHAVIOUR, 1) == 1);
         }
-        mCustomCarrierPref = findPreference(KEY_CUSTOM_CARRIER_LABEL)
+        mCustomCarrierPref = findPreference(KEY_CUSTOM_CARRIER_LABEL);
         updateCustomLabelTextSummary();
     }
     private void updateCustomLabelTextSummary() {
