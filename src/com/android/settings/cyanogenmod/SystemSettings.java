@@ -17,7 +17,9 @@
 package com.android.settings.cyanogenmod;
 
 import android.app.ActivityManagerNative;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -28,7 +30,9 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
+import android.text.Spannable;
 import android.util.Log;
+import android.widget.EditText;
 
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
@@ -43,9 +47,13 @@ public class SystemSettings extends SettingsPreferenceFragment implements
     private static final String KEY_NOTIFICATION_DRAWER_TABLET = "notification_drawer_tablet";
     private static final String KEY_NAVIGATION_BAR = "navigation_bar";
     private static final String KEY_OVERFLOW_BUTTON = "pref_overflow_button";
+    private static final String KEY_CUSTOM_CARRIER_LABEL = "custom_carrier_label";
 
     private ListPreference mFontSizePref;
     private CheckBoxPreference mOverflowButton;
+    private Preference mCustomCarrierPref;
+
+    String mCustomLabelText = null;
 
     private final Configuration mCurConfig = new Configuration();
     
@@ -68,6 +76,17 @@ public class SystemSettings extends SettingsPreferenceFragment implements
             mOverflowButton.setOnPreferenceChangeListener(this);
             mOverflowButton.setChecked(Settings.System.getInt(getActivity().getContentResolver(), 
                 Settings.System.UI_MENU_BUTTON_BEHAVIOUR, 1) == 1);
+        }
+        mCustomCarrierPref = findPreference(KEY_CUSTOM_CARRIER_LABEL)
+        updateCustomLabelTextSummary();
+    }
+    private void updateCustomLabelTextSummary() {
+        mCustomLabelText = Settings.System.getString(getActivity().getContentResolver(),
+                Settings.System.CUSTOM_CARRIER_LABEL);
+        if (mCustomLabelText == null) {
+            mCustomCarrierPref.setSummary(R.string.carrier_warning);
+        } else {
+            mCustomCarrierPref.setSummary(mCustomLabelText);
         }
     }
 
@@ -129,6 +148,34 @@ public class SystemSettings extends SettingsPreferenceFragment implements
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        final String prefKey = preference.getKey();
+        if (KEY_CUSTOM_CARRIER_LABEL.equals(prefKey)) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+            alert.setTitle(R.string.custom_carrier_label_title);
+            alert.setMessage("");
+
+            final EditText input = new EditText(getActivity());
+            input.setText(mCustomLabelText != null ? mCustomLabelText : "");
+            alert.setView(input);
+
+            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    String value = ((Spannable) input.getText()).toString();
+                    Settings.System.putString(getActivity().getContentResolver(),
+                            Settings.System.CUSTOM_CARRIER_LABEL, value);
+                    updateCustomLabelTextSummary();
+                }
+            });
+
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    
+                }
+            });
+
+            alert.show();
+        }
+
         if (preference == mOverflowButton){
             boolean mValue = mOverflowButton.isChecked();
             Settings.System.putInt(getActivity().getContentResolver(), Settings.System.UI_MENU_BUTTON_BEHAVIOUR, mValue ? 1 : 0);

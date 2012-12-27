@@ -919,6 +919,10 @@
     <string name="expanded_haptic_feedback_title">Haptic feedback</string>
     <string name="expanded_haptic_feedback_summary">Enable/disable haptic feedback</string>
 
+    <!-- Custom Carrier Label #CM -->
+    <string name="custom_carrier_label_title">Custom carrier label</string>
+    <string name="carrier_warning">Warning: once changed, without a data wipe you cannot set the field back to the true operator!</string>
+    
     <!-- Status bar #CM -->
     <string name="combined_status_bar_title">@string/status_bar_title</string>
     <string name="status_bar_title">Status bar</string>
