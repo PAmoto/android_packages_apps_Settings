@@ -171,7 +171,7 @@ public class StatusBar extends SettingsPreferenceFragment implements OnPreferenc
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(), 
                     Settings.System.STATUS_BAR_TRANSPARENCY, statusBarTransparency);
             return true;
-	} else if (preference == mStatusBarAmPm) {
+        } else if (preference == mStatusBarAmPm) {
             int statusBarAmPm = Integer.valueOf((String) newValue);
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
                     Settings.System.STATUS_BAR_AM_PM, statusBarAmPm);
