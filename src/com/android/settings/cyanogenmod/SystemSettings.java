@@ -174,9 +174,7 @@ public class SystemSettings extends SettingsPreferenceFragment implements
             });
 
             alert.show();
-        }
-
-        if (preference == mOverflowButton){
+        }else if (preference == mOverflowButton){
             boolean mValue = mOverflowButton.isChecked();
             Settings.System.putInt(getActivity().getContentResolver(), Settings.System.UI_MENU_BUTTON_BEHAVIOUR, mValue ? 1 : 0);
         }
