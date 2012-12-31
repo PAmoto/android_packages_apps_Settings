@@ -54,9 +54,11 @@ public class LockscreenInterface extends SettingsPreferenceFragment implements
     public static final String KEY_BACKGROUND_PREF = "lockscreen_background";
     private static final String KEY_LOCKSCREEN_VIBRATION = "pref_lockscreen_vibration";
     private static final String KEY_CLOCK_ALIGN = "lockscreen_clock_align";
+    private static final String KEY_ALWAYS_BATTERY_PREF = "lockscreen_battery_status";
     private ListPreference mCustomBackground;
     private Preference mWeatherPref;
     private Preference mCalendarPref;
+    private ListPreference mBatteryStatus;
     private ListPreference mClockAlign;
     private Activity mActivity;
     ContentResolver mResolver;
@@ -80,10 +82,12 @@ public class LockscreenInterface extends SettingsPreferenceFragment implements
         mIsScreenLarge = Utils.isScreenLarge();
         wallpaperImage = new File(mActivity.getFilesDir()+"/lockwallpaper");
         wallpaperTemporary = new File(mActivity.getCacheDir()+"/lockwallpaper.tmp");
+        mBatteryStatus = (ListPreference) findPreference(KEY_ALWAYS_BATTERY_PREF);
+        mBatteryStatus.setOnPreferenceChangeListener(this);
         mClockAlign = (ListPreference) findPreference(KEY_CLOCK_ALIGN);
         mClockAlign.setOnPreferenceChangeListener(this);
         updateCustomBackgroundSummary();
-	mLockscreenVibration = (CheckBoxPreference) findPreference(KEY_LOCKSCREEN_VIBRATION);
+        mLockscreenVibration = (CheckBoxPreference) findPreference(KEY_LOCKSCREEN_VIBRATION);
         mLockscreenVibration.setChecked(Settings.System.getInt(getActivity().getContentResolver(), 
             Settings.System.LOCKSCREEN_VIBRATION, 1) == 1);
     }
@@ -137,6 +141,18 @@ public class LockscreenInterface extends SettingsPreferenceFragment implements
             } else {
                 mCalendarPref.setSummary(R.string.lockscreen_calendar_summary);
             }
+        }
+
+        // Set the battery status description text
+        if (mBatteryStatus != null) {
+            boolean batteryStatusAlwaysOn = Settings.System.getInt(mResolver,
+                    Settings.System.LOCKSCREEN_ALWAYS_SHOW_BATTERY, 0) == 1;
+            if (batteryStatusAlwaysOn) {
+                mBatteryStatus.setValueIndex(1);
+            } else {
+                mBatteryStatus.setValueIndex(0);
+            }
+            mBatteryStatus.setSummary(mBatteryStatus.getEntry());
         }
 
         // Set the clock align value
@@ -263,6 +279,13 @@ public class LockscreenInterface extends SettingsPreferenceFragment implements
                 updateCustomBackgroundSummary();
                 break;
             }
+            return true;
+        } else if (preference == mBatteryStatus) {
+            int value = Integer.valueOf((String) objValue);
+            int index = mBatteryStatus.findIndexOfValue((String) objValue);
+            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
+                    Settings.System.LOCKSCREEN_ALWAYS_SHOW_BATTERY, value);
+            mBatteryStatus.setSummary(mBatteryStatus.getEntries()[index]);
             return true;
         } else if (preference == mClockAlign) {
             int value = Integer.valueOf((String) objValue);
