@@ -16,6 +16,11 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
+    <!-- String for navbar height -->
+    <string name="nav_bar_title">Navigation bar</string>
+    <string name="navigation_bar_height_title">Navigation bar height</string>
+    <string name="navigation_bar_width_title">Navigation bar width</string>
+
     <!-- String for ShortcutPickHelper -->
     <string name="picker_activities">Activities</string>
     <string name="select_custom_app_title">Select custom application</string>

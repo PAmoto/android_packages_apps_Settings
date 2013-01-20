@@ -16,18 +16,26 @@
 
 package com.android.settings.cyanogenmod;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
+import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceScreen;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
+import android.text.Spannable;
+import android.widget.EditText;
 
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
 import com.android.settings.Utils;
 
-public class NavBar extends SettingsPreferenceFragment
-        implements Preference.OnPreferenceChangeListener {
+public class NavBar extends SettingsPreferenceFragment implements Preference.OnPreferenceChangeListener {
     private static final String TAG = "NavBarSettings";
 
     private static final String KEY_SOFT_KEYS = "pref_soft_keys";
@@ -35,6 +43,9 @@ public class NavBar extends SettingsPreferenceFragment
 
     private CheckBoxPreference mSoftKeys;
     private PreferenceScreen mNavBarEditor;
+
+    	ListPreference mNavigationBarHeight;
+    	ListPreference mNavigationBarWidth;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,6 +63,11 @@ public class NavBar extends SettingsPreferenceFragment
             mNavBarEditor = (PreferenceScreen) prefSet.findPreference(KEY_NAV_BAR_EDITOR);
             mNavBarEditor.setEnabled(mSoftKeys.isChecked());
 
+            mNavigationBarHeight = (ListPreference) findPreference("navigation_bar_height");
+            mNavigationBarHeight.setOnPreferenceChangeListener(this);
+
+            mNavigationBarWidth = (ListPreference) findPreference("navigation_bar_width");
+            mNavigationBarWidth.setOnPreferenceChangeListener(this);
             if (Utils.isScreenLarge())
                 prefSet.removePreference(mNavBarEditor);
         }
@@ -69,7 +85,39 @@ public class NavBar extends SettingsPreferenceFragment
     }
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        return true;
-    }
+		if (preference == mNavigationBarWidth) {
+		    String newVal = (String) newValue;
+		    int dp = Integer.parseInt(newVal);
+		    int width = mapChosenDpToPixels(dp);
+		    Settings.System.putInt(getContentResolver(), Settings.System.NAVIGATION_BAR_WIDTH,
+		            width);
+		    mNavBarEditor.setEnabled(mSoftKeys.isChecked());
+		    return true;
+		} else if (preference == mNavigationBarHeight) {
+		    String newVal = (String) newValue;
+		    int dp = Integer.parseInt(newVal);
+		    int height = mapChosenDpToPixels(dp);
+		    Settings.System.putInt(getContentResolver(), Settings.System.NAVIGATION_BAR_HEIGHT,
+		            height);
+		    mNavBarEditor.setEnabled(mSoftKeys.isChecked());
+		    return true;
+		}
+		return false;
+	}
+	    public int mapChosenDpToPixels(int dp) {
+		switch (dp) {
+		    case 48:
+		        return getResources().getDimensionPixelSize(R.dimen.navigation_bar_48);
+		    case 42:
+		        return getResources().getDimensionPixelSize(R.dimen.navigation_bar_42);
+		    case 36:
+		        return getResources().getDimensionPixelSize(R.dimen.navigation_bar_36);
+		    case 30:
+		        return getResources().getDimensionPixelSize(R.dimen.navigation_bar_30);
+		    case 24:
+		        return getResources().getDimensionPixelSize(R.dimen.navigation_bar_24);
+		}
+		return -1;
+	    }
 
 }
