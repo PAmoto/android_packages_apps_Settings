@@ -25,6 +25,10 @@
     <string name="arrow_right">→</string>
     <string name="arrow_down">↓</string>
     <string name="nav_button_color_title">Navigation button color</string>
+    <string name="hex">Hex:</string>
+    <string name="hex_hint">#FF000000</string>
+    <string name="set">Set</string>
+    <string name="ics_color">ICS</string>
 
     <!-- String for ShortcutPickHelper -->
     <string name="picker_activities">Activities</string>
