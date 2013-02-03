@@ -92,7 +92,14 @@ public class NavBar extends SettingsPreferenceFragment implements Preference.OnP
     }
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-		if (preference == mNavigationBarWidth) {
+        if (preference == mNavButtonColor) {
+            String hex = ColorPickerPreference.convertToARGB(Integer.valueOf(String
+                .valueOf(newValue)));
+            int intHex = ColorPickerPreference.convertToColorInt(hex);
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.NAVIGATION_BUTTON_COLOR, intHex);
+            return true;
+        } else if (preference == mNavigationBarWidth) {
 		    String newVal = (String) newValue;
 		    int dp = Integer.parseInt(newVal);
 		    int width = mapChosenDpToPixels(dp);
@@ -108,30 +115,23 @@ public class NavBar extends SettingsPreferenceFragment implements Preference.OnP
 		            height);
 		    mNavBarEditor.setEnabled(mSoftKeys.isChecked());
 		    return true;
-        if (preference == mNavButtonColor) {
-            String hex = ColorPickerPreference.convertToARGB(Integer.valueOf(String
-                .valueOf(newValue)));
-            int intHex = ColorPickerPreference.convertToColorInt(hex);
-            Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.NAVIGATION_BUTTON_COLOR, intHex);
-            return true;
 		}
 		return false;
 	}
-	    public int mapChosenDpToPixels(int dp) {
-		switch (dp) {
-		    case 48:
-		        return getResources().getDimensionPixelSize(R.dimen.navigation_bar_48);
-		    case 42:
-		        return getResources().getDimensionPixelSize(R.dimen.navigation_bar_42);
-		    case 36:
-		        return getResources().getDimensionPixelSize(R.dimen.navigation_bar_36);
-		    case 30:
-		        return getResources().getDimensionPixelSize(R.dimen.navigation_bar_30);
-		    case 24:
-		        return getResources().getDimensionPixelSize(R.dimen.navigation_bar_24);
-		}
-		return -1;
-	    }
-
+        public int mapChosenDpToPixels(int dp) {
+            switch (dp) {
+                case 48:
+                    return getResources().getDimensionPixelSize(R.dimen.navigation_bar_48);
+                case 42:
+                    return getResources().getDimensionPixelSize(R.dimen.navigation_bar_42);
+                case 36:
+                    return getResources().getDimensionPixelSize(R.dimen.navigation_bar_36);
+                case 30:
+                    return getResources().getDimensionPixelSize(R.dimen.navigation_bar_30);
+                case 24:
+                    return getResources().getDimensionPixelSize(R.dimen.navigation_bar_24);
+            }
+            return -1;
+        }
+    }
 }
