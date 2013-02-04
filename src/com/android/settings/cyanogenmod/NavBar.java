@@ -133,5 +133,5 @@ public class NavBar extends SettingsPreferenceFragment implements Preference.OnP
             }
             return -1;
         }
-    }
+
 }
