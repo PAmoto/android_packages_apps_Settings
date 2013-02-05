@@ -29,6 +29,11 @@
     <string name="hex_hint">#FF000000</string>
     <string name="set">Set</string>
     <string name="ics_color">ICS</string>
+    <string name="navigation_bar_glow_time_title">Glow animation duration</string>
+    <string name="navigation_bar_glow_time_summary">Adjust the speed of the glow animation</string>
+    <string name="navigation_bar_glow_off">Off</string>
+    <string name="navigation_bar_glow_quick">Quick</string>
+    <string name="navigation_bar_glow_normal">Normal</string>
 
     <!-- String for ShortcutPickHelper -->
     <string name="picker_activities">Activities</string>

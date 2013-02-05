@@ -48,4 +48,12 @@
         android:defaultValue="#FFFFFF"
         />
 
+    <ListPreference
+        android:key="glow_times"
+        android:dialogTitle="@string/navigation_bar_glow_time_title"
+        android:title="@string/navigation_bar_glow_time_title"
+        android:summary="@string/navigation_bar_glow_time_summary"
+        android:entries="@array/entries_nav_bar_glow_time"
+        android:entryValues="@array/values_nav_bar_glow_time" />
+
 </PreferenceScreen>

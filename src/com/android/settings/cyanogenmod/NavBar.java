@@ -24,12 +24,14 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.text.Spannable;
+import android.util.Log;
 import android.widget.EditText;
 
 import com.android.settings.R;
@@ -47,6 +49,7 @@ public class NavBar extends SettingsPreferenceFragment implements Preference.OnP
     private CheckBoxPreference mSoftKeys;
     private PreferenceScreen mNavBarEditor;
     private ColorPickerPreference mNavButtonColor;
+    private ListPreference mGlowTimes;
 
     	ListPreference mNavigationBarHeight;
     	ListPreference mNavigationBarWidth;
@@ -75,6 +78,9 @@ public class NavBar extends SettingsPreferenceFragment implements Preference.OnP
 
             mNavButtonColor = (ColorPickerPreference) prefSet.findPreference(NAVIGATION_BUTTON_COLOR);
             mNavButtonColor.setOnPreferenceChangeListener(this);
+
+            mGlowTimes = (ListPreference) prefSet.findPreference("glow_times");
+            mGlowTimes.setOnPreferenceChangeListener(this);
             if (Utils.isScreenLarge())
                 prefSet.removePreference(mNavBarEditor);
         }
@@ -92,7 +98,21 @@ public class NavBar extends SettingsPreferenceFragment implements Preference.OnP
     }
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference == mNavButtonColor) {
+        if (preference == mGlowTimes) {
+            int breakIndex = ((String) newValue).indexOf("|");
+            String value = (String) newValue;
+
+            int offTime = Integer.parseInt(value.substring(breakIndex + 1));
+            int onTime = Integer.parseInt(value.substring(0, breakIndex));
+
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_GLOW_DURATION[0],
+                    offTime);
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_GLOW_DURATION[1],
+                    onTime);
+            return true;
+        } else if (preference == mNavButtonColor) {
             String hex = ColorPickerPreference.convertToARGB(Integer.valueOf(String
                 .valueOf(newValue)));
             int intHex = ColorPickerPreference.convertToColorInt(hex);
@@ -133,5 +153,4 @@ public class NavBar extends SettingsPreferenceFragment implements Preference.OnP
             }
             return -1;
         }
-
 }
