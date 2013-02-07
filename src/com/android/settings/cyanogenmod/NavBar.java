@@ -45,10 +45,12 @@ public class NavBar extends SettingsPreferenceFragment implements Preference.OnP
     private static final String KEY_SOFT_KEYS = "pref_soft_keys";
     private static final String KEY_NAV_BAR_EDITOR = "navigation_bar";
     private static final String NAVIGATION_BUTTON_COLOR = "navigation_button_color";
+    private static final String PREF_NAV_GLOW_COLOR = "nav_button_glow_color";
 
     private CheckBoxPreference mSoftKeys;
     private PreferenceScreen mNavBarEditor;
     private ColorPickerPreference mNavButtonColor;
+    ColorPickerPreference mNavigationBarGlowColor;
     private ListPreference mGlowTimes;
 
     	ListPreference mNavigationBarHeight;
@@ -78,6 +80,9 @@ public class NavBar extends SettingsPreferenceFragment implements Preference.OnP
 
             mNavButtonColor = (ColorPickerPreference) prefSet.findPreference(NAVIGATION_BUTTON_COLOR);
             mNavButtonColor.setOnPreferenceChangeListener(this);
+
+            mNavigationBarGlowColor = (ColorPickerPreference) findPreference(PREF_NAV_GLOW_COLOR);
+            mNavigationBarGlowColor.setOnPreferenceChangeListener(this);
 
             mGlowTimes = (ListPreference) prefSet.findPreference("glow_times");
             mGlowTimes.setOnPreferenceChangeListener(this);
@@ -118,6 +123,14 @@ public class NavBar extends SettingsPreferenceFragment implements Preference.OnP
             int intHex = ColorPickerPreference.convertToColorInt(hex);
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.NAVIGATION_BUTTON_COLOR, intHex);
+            return true;
+        } else if (preference == mNavigationBarGlowColor) {
+            String hex = ColorPickerPreference.convertToARGB(
+                    Integer.valueOf(String.valueOf(newValue)));
+            preference.setSummary(hex);
+            int intHex = ColorPickerPreference.convertToColorInt(hex);
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_GLOW_TINT, intHex);
             return true;
         } else if (preference == mNavigationBarWidth) {
 		    String newVal = (String) newValue;

@@ -56,4 +56,10 @@
         android:entries="@array/entries_nav_bar_glow_time"
         android:entryValues="@array/values_nav_bar_glow_time" />
 
+    <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:key="nav_button_glow_color"
+            android:title="@string/navigation_bar_glow_tint_title"
+            android:summary="@string/navigation_bar_glow_tint_summary"
+            android:defaultValue="#FFFFFF" />
+
 </PreferenceScreen>
