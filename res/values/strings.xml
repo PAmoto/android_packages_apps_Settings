@@ -36,6 +36,7 @@
     <string name="navigation_bar_glow_normal">Normal</string>
     <string name="navigation_bar_glow_tint_title">Navigation bar glow color</string>
     <string name="navigation_bar_glow_tint_summary">When you press on a button, there is a glow. Use this to change the color of the glow.</string>
+    <string name="button_transparency_title">Navigation bar button transparency</string>
 
     <!-- String for ShortcutPickHelper -->
     <string name="picker_activities">Activities</string>

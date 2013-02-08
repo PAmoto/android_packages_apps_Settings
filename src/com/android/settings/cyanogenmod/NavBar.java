@@ -33,6 +33,7 @@ import android.provider.Settings.SettingNotFoundException;
 import android.text.Spannable;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.SeekBarPreference;
 
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
@@ -55,6 +56,7 @@ public class NavBar extends SettingsPreferenceFragment implements Preference.OnP
 
     	ListPreference mNavigationBarHeight;
     	ListPreference mNavigationBarWidth;
+        SeekBarPreference mButtonAlpha;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,6 +88,13 @@ public class NavBar extends SettingsPreferenceFragment implements Preference.OnP
 
             mGlowTimes = (ListPreference) prefSet.findPreference("glow_times");
             mGlowTimes.setOnPreferenceChangeListener(this);
+
+            float defaultAlpha = Settings.System.getFloat(getActivity()
+                    .getContentResolver(), Settings.System.NAVIGATION_BAR_BUTTON_ALPHA,
+                    0.6f);
+            mButtonAlpha = (SeekBarPreference) findPreference("button_transparency");
+            mButtonAlpha.setInitValue((int) (defaultAlpha * 100));
+            mButtonAlpha.setOnPreferenceChangeListener(this);
             if (Utils.isScreenLarge())
                 prefSet.removePreference(mNavBarEditor);
         }
@@ -116,6 +125,13 @@ public class NavBar extends SettingsPreferenceFragment implements Preference.OnP
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.NAVIGATION_BAR_GLOW_DURATION[1],
                     onTime);
+            return true;
+        } else if (preference == mButtonAlpha) {
+            float val = Float.parseFloat((String) newValue);
+            Log.e("R", "value: " + val / 100);
+            Settings.System.putFloat(getActivity().getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_BUTTON_ALPHA,
+                    val / 100);
             return true;
         } else if (preference == mNavButtonColor) {
             String hex = ColorPickerPreference.convertToARGB(Integer.valueOf(String
