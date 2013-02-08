@@ -97,6 +97,8 @@ public class NavBar extends SettingsPreferenceFragment implements Preference.OnP
             mButtonAlpha.setOnPreferenceChangeListener(this);
             if (Utils.isScreenLarge())
                 prefSet.removePreference(mNavBarEditor);
+                prefSet.removePreference(mNavigationBarWidth);
+                prefSet.removePreference(mNavigationBarHeight);
         }
     }
 
