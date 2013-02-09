@@ -17,7 +17,10 @@
 package com.android.settings.paranoid;
 
 import android.content.Context;
-import android.os.PowerManager;
+import android.os.IPowerManager;
+import android.os.IBinder;
+import android.os.ServiceManager;
+import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.util.ExtendedPropertiesUtils;
 
@@ -32,6 +35,7 @@ public class RomUtils extends ExtendedPropertiesUtils{
     private static final String ROM_VERSION = "ro.pa.version";
     private static final int TRIGGER_REBOOT = 0;
     private static final int TRIGGER_SYSTEM_UI_RELOAD = 1;
+    private static final int TRIGGER_HOT_REBOOT = 2;
     public static Context mContext;
 
     public static void setContext(Context context){
@@ -90,23 +94,40 @@ public class RomUtils extends ExtendedPropertiesUtils{
         }
     }
 
+    public static String getHybridProp(String prop, String defaultValue) {
+        return ExtendedPropertiesUtils.getProperty(ExtendedPropertiesUtils.PARANOID_PREFIX + prop, defaultValue);
+    }
+
     /*
      * Action Utils
      */
     public static void restartSystemUI(){
-	RunCommands.execute(new String[]{"su", "busybox killall com.android.systemui"} ,0);
+        RunCommands.execute(new String[]{"su", "busybox killall com.android.systemui"} ,0);
     }
 
     public static void triggerAction(int action) {
-	switch(action){
-	   case TRIGGER_REBOOT:
-	      PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-              pm.reboot("ParanoidAndroid Triggered Reboot");
-	   break;
-	   case TRIGGER_SYSTEM_UI_RELOAD:
-	      restartSystemUI();
-	   break;
-	}
+    IBinder b = ServiceManager.getService(Context.POWER_SERVICE);
+        IPowerManager pm = IPowerManager.Stub.asInterface(b);
+
+        switch(action){
+            case TRIGGER_REBOOT:
+                try {
+                    pm.reboot("ParanoidAndroid Triggered Reboot");
+                } catch (android.os.RemoteException e) {
+                    //
+                }
+                break;
+            case TRIGGER_SYSTEM_UI_RELOAD:
+                restartSystemUI();
+                break;
+            case TRIGGER_HOT_REBOOT:
+                try {
+                    pm.crash("ParanoidAndroid Triggered Hot Reboot");
+                } catch (android.os.RemoteException e) {
+                    //
+                }
+                break;
+        }
     }
 
     /*

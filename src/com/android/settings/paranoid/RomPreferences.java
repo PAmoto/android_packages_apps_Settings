@@ -58,6 +58,7 @@ public class RomPreferences extends SettingsPreferenceFragment
     private static final String KEY_FRAME_DPI = "pref_framework_dpi";
     private static final String KEY_SYSUI_DPI = "pref_systemui_dpi";
     private static final String CUSTOM_LCD_DENSITY = "custom";
+    private static final String KEY_ENABLE_HYBRID = "pref_enable_hybrid";
 
     private PreferenceCategory mPrefCategoryHybrid;
     private PreferenceScreen mAppList;
@@ -67,6 +68,7 @@ public class RomPreferences extends SettingsPreferenceFragment
     private ListPreference mUserDpi;
     private ListPreference mFrameDpi;
     private ListPreference mSysUiDpi;
+    private CheckBoxPreference mEnableHybrid;
 
     private static boolean mValue;
     private Context mContext;
@@ -100,8 +102,13 @@ public class RomPreferences extends SettingsPreferenceFragment
                     
             mAppList = (PreferenceScreen) prefSet.findPreference(KEY_APP_LIST_SCREEN);
             mPrefCategoryHybrid = (PreferenceCategory) findPreference(CATEGORY_HYBRID_GENERAL);
-                    
+
+            mEnableHybrid = (CheckBoxPreference) prefSet.findPreference(KEY_ENABLE_HYBRID);
+
             RomUtils.setContext(mContext);
+
+            mEnableHybrid.setChecked(RomUtils.getHybridProp("hybrid_mode", "0").equals("1"));
+            updatePreferences();
          }
     }
 
@@ -150,7 +157,19 @@ public class RomPreferences extends SettingsPreferenceFragment
         } 
         return true;
     }
-    
+
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        String value;
+        if(preference == mEnableHybrid) {
+            value = (mEnableHybrid.isChecked()) ? "1" : "0";
+            RomUtils.setHybridProperty("%hybrid_mode", value);
+            updatePreferences();
+            confirmReboot();
+            return true;
+        }
+        return false;
+    }
+
     public void getDensityDialog(String property) {
         getDensityDialog(property, -1);
     }
@@ -179,4 +198,30 @@ public class RomPreferences extends SettingsPreferenceFragment
         alert.show();
     }
 
+    public void updatePreferences() {
+        boolean enabled = mEnableHybrid.isChecked();
+
+        mStatusBarMode.setEnabled(enabled);
+        mUserMode.setEnabled(enabled);
+        mSystemDpi.setEnabled(enabled);
+        mUserDpi.setEnabled(enabled);
+        mFrameDpi.setEnabled(enabled);
+        mSysUiDpi.setEnabled(enabled);
+        mAppList.setEnabled(enabled);
+    }
+
+    public void confirmReboot() {
+        new AlertDialog.Builder(mContext)
+                .setTitle(R.string.pa_reboot_dialog_title)
+                .setMessage(R.string.pa_reboot_dialog_msg)
+                .setNegativeButton(R.string.pa_reboot_dialog_negative, null)
+                .setPositiveButton(R.string.pa_reboot_dialog_positive, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        RomUtils.triggerAction(2);
+                    }
+                })
+                .create()
+                .show();
+    }
 }

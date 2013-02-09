@@ -1067,6 +1067,10 @@
 
     <string name="hybrid_settings_title">Hybrid Settings</string>
     <string name="hybrid_settings_summary">Hybrid mode options</string>
+    <string name="pa_reboot_dialog_title">Reboot required</string>
+    <string name="pa_reboot_dialog_msg">Reboot to enable/disable hybrid mode</string>
+    <string name="pa_reboot_dialog_negative">Reboot later</string>
+    <string name="pa_reboot_dialog_positive">Reboot now</string>
 
     <string name="statusbar_mode_title">Statusbar style</string>
     <string name="statusbar_mode_summary">Switch between preset styles. (requires reboot)</string>
