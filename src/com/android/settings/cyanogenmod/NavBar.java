@@ -51,12 +51,12 @@ public class NavBar extends SettingsPreferenceFragment implements Preference.OnP
     private CheckBoxPreference mSoftKeys;
     private PreferenceScreen mNavBarEditor;
     private ColorPickerPreference mNavButtonColor;
-    ColorPickerPreference mNavigationBarGlowColor;
     private ListPreference mGlowTimes;
 
     	ListPreference mNavigationBarHeight;
     	ListPreference mNavigationBarWidth;
         SeekBarPreference mButtonAlpha;
+        ColorPickerPreference mNavigationBarGlowColor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
