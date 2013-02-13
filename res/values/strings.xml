@@ -19,7 +19,9 @@
     <!-- String for navbar -->
     <string name="nav_bar_title">Navigation bar</string>
     <string name="navigation_bar_height_title">Navigation bar height</string>
+    <string name="navigation_bar_height_summary">Adjust phone navigation bar height</string>
     <string name="navigation_bar_width_title">Navigation bar width</string>
+    <string name="navigation_bar_width_summary">Adjust phone navigation bar width</string>
     <string name="dialog_color_picker">Color picker</string>
     <string name="press_color_to_apply">Press on color to apply</string>
     <string name="arrow_right">→</string>
