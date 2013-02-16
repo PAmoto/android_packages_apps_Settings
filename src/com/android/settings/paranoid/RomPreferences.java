@@ -158,6 +158,7 @@ public class RomPreferences extends SettingsPreferenceFragment
         return true;
     }
 
+    @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         String value;
         if(preference == mEnableHybrid) {
@@ -165,9 +166,8 @@ public class RomPreferences extends SettingsPreferenceFragment
             RomUtils.setHybridProperty("%hybrid_mode", value);
             updatePreferences();
             confirmReboot();
-            return true;
         }
-        return false;
+        return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
     public void getDensityDialog(String property) {
