@@ -55,6 +55,8 @@ public class StatusBar extends SettingsPreferenceFragment implements OnPreferenc
 
     private static final String STATUS_BAR_HW_RENDERING = "pref_statusbar_hw_rendering";
 
+    private static final String STATUS_BAR_TABLET_TOP = "status_bar_tablet_top";
+
     private ListPreference mStatusBarAmPm;
 
     private ListPreference mStatusBarBattery;
@@ -77,6 +79,8 @@ public class StatusBar extends SettingsPreferenceFragment implements OnPreferenc
 
     private PreferenceCategory mPrefCategoryGeneral;
 
+    private CheckBoxPreference mStatusBarTabletTop;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +98,7 @@ public class StatusBar extends SettingsPreferenceFragment implements OnPreferenc
         mStatusBarCmSignal = (ListPreference) prefSet.findPreference(STATUS_BAR_SIGNAL);
         mStatusbarTransparency = (ListPreference) prefSet.findPreference(STATUS_BAR_TRANSPARENCY);
         mStatusBarHwRendering = (CheckBoxPreference) prefSet.findPreference(STATUS_BAR_HW_RENDERING);
+        mStatusBarTabletTop = (CheckBoxPreference) prefSet.findPreference(STATUS_BAR_TABLET_TOP);
 
         mStatusBarClock.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
                 Settings.System.STATUS_BAR_CLOCK, 1) == 1));
@@ -102,6 +107,8 @@ public class StatusBar extends SettingsPreferenceFragment implements OnPreferenc
         mStatusBarHwRendering.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
                 Settings.System.STATUS_BAR_HW_RENDERING, 0) == 1);
         mStatusbarTransparency.setEnabled(mStatusBarHwRendering.isChecked());
+        mStatusBarTabletTop.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
+                Settings.System.STATUS_BAR_TABLET_TOP, 0) == 1));
 
         try {
             if (Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(), 
@@ -222,6 +229,11 @@ public class StatusBar extends SettingsPreferenceFragment implements OnPreferenc
             value = mStatusBarNotifCount.isChecked();
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
                     Settings.System.STATUS_BAR_NOTIF_COUNT, value ? 1 : 0);
+            return true;
+        } else if (preference == mStatusBarTabletTop) {
+            value = mStatusBarTabletTop.isChecked();
+            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
+                    Settings.System.STATUS_BAR_TABLET_TOP, value ? 1 : 0);
             return true;
         }
         return false;
